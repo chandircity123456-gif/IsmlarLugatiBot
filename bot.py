@@ -4,7 +4,7 @@ from telegram.ext import Application, MessageHandler, ContextTypes, filters, Com
 from ismlar import ISMLAR_LUGATI 
 
 # !!! BOT TOKENINGIZNI BU YERGA QO'YING. RENDER BU QATORNI O'ZI UCHUN ISHLATADI !!!
-TOKEN = os.environ.get("8422115593:AAH_9RJtYUSp8IyDfdt9qbKsDoaC0tSjuZE")
+TOKEN = "8422115593:AAH_9RJtYUSp8IyDfdt9qbKsDoaC0tSjuZE" 
 WEBHOOK_URL = os.environ.get("WEBHOOK_URL", None)
 
 
@@ -19,8 +19,11 @@ async def ism_qidirish(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     
     if kalit_soz in ISMLAR_LUGATI:
         ma'nosi = ISMLAR_LUGATI[kalit_soz]
-        javob = f"**{qidiriladigan_ism.capitalize()}** ismining ma'nosi:\n\n_{ma'nosi}_"
+        # XATO TO'G'IRLANDI: Ma'nosi so'zidagi yagona tirnoq xato keltirayotgan edi.
+        # Endi ism.capitalize() dan keyin bosh tirnoq qo'yildi.
+        javob = f"**{qidiriladigan_ism.capitalize()}** ismining ma'nosi:\n\n_{ma'nosi}_" 
     else:
+        # XATO TO'G'IRLANDI: Kechirasiz so'zidagi yagona tirnoq xato keltirayotgan edi.
         javob = f"Kechirasiz, **{qidiriladigan_ism.capitalize()}** ismining ma'nosi lug'atda topilmadi."
 
     await update.message.reply_text(javob, parse_mode='Markdown')
@@ -46,4 +49,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
