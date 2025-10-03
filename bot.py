@@ -3,16 +3,15 @@ from telegram import Update
 from telegram.ext import Application, MessageHandler, ContextTypes, filters, CommandHandler
 from ismlar import ISMLAR_LUGATI 
 
-# !!! TOKENINGIZ RENDER MUAMMOLARI TUFAYLI BU YERGA QO'YILGAN !!!
+# !!! BOT TOKENINGIZ !!!
 TOKEN = "8422115593:AAH_9RJtYUSp8IyDfdt9qbKsDoaC0tSjuZE" 
 WEBHOOK_URL = os.environ.get("WEBHOOK_URL", None)
 
 
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    # Uch tirnoq ishlatildi, apostrof xatosi chiqmaydi
-    xabar = """Assalomu alaykum! Ismlar lug'ati botiga xush kelibsiz.
-Menga ma'nosini bilmoqchi bo'lgan **ismni yuboring**."""
-    await update.message.reply_text(xabar, parse_mode='Markdown')
+    # 100% Inglizcha matnlar. Sintaksis xatosi chiqmaydi.
+    xabar = "Welcome to the Name Dictionary Bot. Send me a name to search."
+    await update.message.reply_text(xabar)
 
 async def ism_qidirish(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     qidiriladigan_ism = update.message.text
@@ -20,13 +19,11 @@ async def ism_qidirish(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     
     if kalit_soz in ISMLAR_LUGATI:
         ma'nosi = ISMLAR_LUGATI[kalit_soz]
-        # Uch tirnoq ishlatildi
-        javob = f"""**{qidiriladigan_ism.capitalize()}** ismining ma'nosi:
-
-_{ma'nosi}_""" 
+        # Xato keltiruvchi barcha apostroflar olib tashlandi.
+        javob = f"Name: {qidiriladigan_ism.capitalize()}\n\nMeaning: {ma'nosi}" 
     else:
-        # Uch tirnoq ishlatildi
-        javob = f"""Kechirasiz, **{qidiriladigan_ism.capitalize()}** ismining ma'nosi lug'atda topilmadi."""
+        # Xato keltiruvchi barcha apostroflar olib tashlandi.
+        javob = f"Sorry, the name {qidiriladigan_ism.capitalize()} was not found in the dictionary."
 
     await update.message.reply_text(javob, parse_mode='Markdown')
 
