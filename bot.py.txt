@@ -1,0 +1,9 @@
+# ismlar.py
+# Barcha ismlarni kichik harfda yozing!
+
+ISMLAR_LUGATI = {
+    "ali": "Yuksak, ulug', qadrli. (Arabcha)",
+    "umar": "Uzoq umr ko'ruvchi, yashovchi. (Arabcha)",
+    "doston": "Qissa, hikoya, ertak. (Fors/Tojikcha)",
+    # QO'SHIMCHA ISMLARNI BU YERGA KIRITING!
+}
