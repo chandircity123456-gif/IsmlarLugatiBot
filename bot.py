@@ -9,10 +9,10 @@ WEBHOOK_URL = os.environ.get("WEBHOOK_URL", None)
 
 
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    # "lug'ati" so'zidagi yakka tirnoq (\') bilan almashtirildi
-    xabar = "Assalomu alaykum! Ismlar lug'ati botiga xush kelibsiz.\n"
-    xabar += "Menga ma'nosini bilmoqchi bo'lgan **ismni yuboring**."
-    await update.message.reply_text(xabar)
+    # Uch tirnoq ishlatildi, apostrof xatosi chiqmaydi
+    xabar = """Assalomu alaykum! Ismlar lug'ati botiga xush kelibsiz.
+Menga ma'nosini bilmoqchi bo'lgan **ismni yuboring**."""
+    await update.message.reply_text(xabar, parse_mode='Markdown')
 
 async def ism_qidirish(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     qidiriladigan_ism = update.message.text
@@ -20,11 +20,13 @@ async def ism_qidirish(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     
     if kalit_soz in ISMLAR_LUGATI:
         ma'nosi = ISMLAR_LUGATI[kalit_soz]
-        # "ma'nosi" so'zidagi yakka tirnoq (\') bilan almashtirildi
-        javob = f"**{qidiriladigan_ism.capitalize()}** ismining ma\'nosi:\n\n_{ma\'nosi}_" 
+        # Uch tirnoq ishlatildi
+        javob = f"""**{qidiriladigan_ism.capitalize()}** ismining ma'nosi:
+
+_{ma'nosi}_""" 
     else:
-        # "Kechirasiz" va "ma'nosi" so'zidagi yakka tirnoq (\') bilan almashtirildi
-        javob = f"Kechirasiz, **{qidiriladigan_ism.capitalize()}** ismining ma\'nosi lug\'atda topilmadi."
+        # Uch tirnoq ishlatildi
+        javob = f"""Kechirasiz, **{qidiriladigan_ism.capitalize()}** ismining ma'nosi lug'atda topilmadi."""
 
     await update.message.reply_text(javob, parse_mode='Markdown')
 
