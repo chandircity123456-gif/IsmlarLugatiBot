@@ -1,0 +1,36 @@
+from telegram import Update
+from telegram.ext import Application, MessageHandler, ContextTypes, filters, CommandHandler
+from ismlar import ISMLAR_LUGATI # 2.2-qadamda yaratgan lug'atimizni import qilyapmiz
+
+# !!!!!!!!! BOT TOKENINGIZNI BU YERGA QO'YING !!!!!!!!!
+TOKEN = "8422115593:AAH_9RJtYUSp8IyDfdt9qbKsDoaC0tSjuZE" 
+
+async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    xabar = "Assalomu alaykum! Ismlar lug'ati botiga xush kelibsiz.\n"
+    xabar += "Menga ma'nosini bilmoqchi bo'lgan **ismni yuboring**."
+    await update.message.reply_text(xabar)
+
+async def ism_qidirish(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    qidiriladigan_ism = update.message.text
+    kalit_soz = qidiriladigan_ism.lower().strip()
+    
+    if kalit_soz in ISMLAR_LUGATI:
+        ma'nosi = ISMLAR_LUGATI[kalit_soz]
+        javob = f"**{qidiriladigan_ism.capitalize()}** ismining ma'nosi:\n\n_{ma'nosi}_"
+    else:
+        javob = f"Kechirasiz, **{qidiriladigan_ism.capitalize()}** ismining ma'nosi lug'atda topilmadi."
+
+    await update.message.reply_text(javob, parse_mode='Markdown')
+
+def main() -> None:
+    app = Application.builder().token(TOKEN).build()
+
+    # Buyruq va matn handlerlarini bog'lash
+    app.add_handler(CommandHandler("start", start_command))
+    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, ism_qidirish))
+
+    print("Ismlar Lug'ati Boti ishga tushirildi...")
+    app.run_polling() # Botni doimiy ishlashi uchun Polling usuli
+
+if __name__ == "__main__":
+    main()
