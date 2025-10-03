@@ -6,4 +6,5 @@ ISMLAR_LUGATI = {
     "umar": "Uzoq umr ko'ruvchi, yashovchi. (Arabcha)",
     "doston": "Qissa, hikoya, ertak. (Fors/Tojikcha)",
     # QO'SHIMCHA ISMLARNI BU YERGA KIRITING!
+
 }
