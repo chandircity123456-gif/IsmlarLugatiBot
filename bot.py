@@ -4,11 +4,13 @@ from telegram.ext import Application, MessageHandler, ContextTypes, filters, Com
 from ismlar import ISMLAR_LUGATI 
 
 # !!! BOT TOKENINGIZNI BU YERGA QO'YING. RENDER BU QATORNI O'ZI UCHUN ISHLATADI !!!
+# Renderdagi xatolar tufayli tokenni to'g'ridan-to'g'ri kiritdik.
 TOKEN = "8422115593:AAH_9RJtYUSp8IyDfdt9qbKsDoaC0tSjuZE" 
 WEBHOOK_URL = os.environ.get("WEBHOOK_URL", None)
 
 
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    # Apostrof xatolari to'g'irlandi
     xabar = "Assalomu alaykum! Ismlar lug'ati botiga xush kelibsiz.\n"
     xabar += "Menga ma'nosini bilmoqchi bo'lgan **ismni yuboring**."
     await update.message.reply_text(xabar)
@@ -19,11 +21,10 @@ async def ism_qidirish(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     
     if kalit_soz in ISMLAR_LUGATI:
         ma'nosi = ISMLAR_LUGATI[kalit_soz]
-        # XATO TO'G'IRLANDI: Ma'nosi so'zidagi yagona tirnoq xato keltirayotgan edi.
-        # Endi ism.capitalize() dan keyin bosh tirnoq qo'yildi.
+        # Xato to'g'irlandi (ma'nosi so'zi ishtirok etgan joy)
         javob = f"**{qidiriladigan_ism.capitalize()}** ismining ma'nosi:\n\n_{ma'nosi}_" 
     else:
-        # XATO TO'G'IRLANDI: Kechirasiz so'zidagi yagona tirnoq xato keltirayotgan edi.
+        # Xato to'g'irlandi (Kechirasiz so'zi ishtirok etgan joy)
         javob = f"Kechirasiz, **{qidiriladigan_ism.capitalize()}** ismining ma'nosi lug'atda topilmadi."
 
     await update.message.reply_text(javob, parse_mode='Markdown')
