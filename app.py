@@ -2,8 +2,9 @@ import os
 from flask import Flask, request
 import telebot
 
-API_TOKEN = os.environ.get("TELEGRAM_TOKEN") or "8422115593:AAH_9RJtYUSp8IyDfdt9qbKsDoaC0tSjuZE"
-bot = telebot.TeleBot(API_TOKEN)
+# Token Render Environment Variables ichidan olinadi
+TOKEN = os.environ.get("TELEGRAM_TOKEN")
+bot = telebot.TeleBot(TOKEN)
 app = Flask(__name__)
 
 # Ismlar lug‘ati
@@ -27,7 +28,7 @@ def ism_manosini_top(message):
         bot.reply_to(message, "Kechirasiz, bu ism lug‘atda topilmadi ❌.")
 
 # Webhook qabul qiluvchi endpoint
-@app.route('/' + API_TOKEN, methods=['POST'])
+@app.route('/' + TOKEN, methods=['POST'])
 def getMessage():
     json_str = request.stream.read().decode("UTF-8")
     update = telebot.types.Update.de_json(json_str)
