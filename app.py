@@ -1,45 +1,44 @@
-import telebot
-from telebot import types
-from flask import Flask, request
 import os
+from flask import Flask, request
+import telebot
 
-API_TOKEN = '8422115593:AAH_9RJtYUSp8IyDfdt9qbKsDoaC0tSjuZE'
-
-bot = telebot.TeleBot(API_TOKEN)
+TOKEN = "8422115593:AAH_9RJtYUSp8IyDfdt9qbKsDoaC0tSjuZE"
+bot = telebot.TeleBot(TOKEN)
 app = Flask(__name__)
 
-# === Ismlar lug‘ati ===
+# --- Ismlar lug‘ati ---
 ismlar = {
-    "ali": "Yuksak, ulug‘, oliy",
-    "umar": "Uzoq umrli, yashovchan",
-    "hasan": "Chiroyli, go‘zal",
-    "husan": "Go‘zal, chiroyli yigit"
+    "ali": "Arabcha ism, 'ulug‘' degani.",
+    "dilshod": "Forscha, 'xursand yurak' degani.",
 }
 
-# === Foydalanuvchidan so‘z olish ===
-@bot.message_handler(func=lambda message: True)
-def ism_manosi(message):
+# --- Start komandasi ---
+@bot.message_handler(commands=['start'])
+def send_welcome(message):
+    bot.reply_to(message, "Salom! 😊 Men Ismlar lug‘ati botman. Ism yuboring.")
+
+# --- Ism ma’nosini topish ---
+@bot.message_handler(func=lambda m: True)
+def ism_manosini_top(message):
     ism = message.text.lower().strip()
     if ism in ismlar:
         bot.reply_to(message, f"{ism.capitalize()} ismining ma’nosi:\n{ismlar[ism]}")
     else:
-        bot.reply_to(message, "Kechirasiz, bu ism lug‘atda topilmadi ❌")
+        bot.reply_to(message, "Kechirasiz, bu ism lug‘atda topilmadi ❌.")
 
-# === Telegram Webhookdan so‘rov qabul qilish ===
-@app.route('/' + API_TOKEN, methods=['POST'])
-def getMessage():
-    try:
-        json_str = request.stream.read().decode('UTF-8')
-        update = telebot.types.Update.de_json(json_str)
-        bot.process_new_updates([update])
-    except Exception as e:
-        print("Xatolik:", e)
-    return "OK", 200
-
-# === Render health-check ===
+# --- Flask index sahifasi ---
 @app.route('/')
 def index():
-    return "Bot is running!", 200
+    return "Bot is running!"
 
+# --- Webhook uchun endpoint ---
+@app.route(f'/{TOKEN}', methods=['POST'])
+def getMessage():
+    json_str = request.stream.read().decode('utf-8')
+    update = telebot.types.Update.de_json(json_str)
+    bot.process_new_updates([update])
+    return '', 200
+
+# --- Main ishga tushirish ---
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5000)))
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
